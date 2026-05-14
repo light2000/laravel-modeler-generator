@@ -1,0 +1,31 @@
+syntax = "proto3";
+import "item.proto";
+
+option php_namespace = "Proto";
+option go_package = "/proto;proto";
+
+//
+// ======
+// 模块
+// ======
+//
+
+message Module {
+  // ULID
+  string id = 1;
+
+  // 展示名称
+  string name = 2;
+
+  // 代码标识
+  string code = 3;
+
+  // 模块描述
+  string description = 4;
+
+  // 模型 (models / tables)
+  repeated Item items = 5;
+
+  // 命名空间ID
+  string namespace_id = 6;
+}

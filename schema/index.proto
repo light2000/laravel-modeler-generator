@@ -1,0 +1,24 @@
+
+syntax = "proto3";
+
+option php_namespace = "Proto";
+option go_package = "/proto;proto";
+
+enum IndexType {
+    INDEX_TYPE_INDEX = 0;
+    INDEX_TYPE_UNIQUE = 1;
+}
+
+message Index {
+  // ULID
+  string id = 1;
+
+  // 索引编码
+  string code = 2;
+
+  // 索引类型
+  IndexType type = 3;
+
+  // 属性ID
+  repeated string attr_ids = 4;
+}

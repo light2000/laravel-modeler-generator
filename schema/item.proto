@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+import "relation.proto";
+import "attribute.proto";
+import "index.proto";
+
+option php_namespace = "Proto";
+option go_package = "/proto;proto";
+
+//
+// ======
+// 模型
+// ======
+//
+
+message Item {
+  // ULID
+  string id = 1;
+
+  // 模型名称
+  string name = 2;
+
+  // 模型代码
+  string code = 3;
+
+  // 模型表名
+  string table = 4;
+
+  // 模型描述
+  string description = 5;
+
+  // 是否软删除
+  bool soft_del = 6;
+
+  // 是否包含创建时间、更新时间
+  bool has_created_at = 7;
+
+  // 是否包含更新时间
+  bool has_updated_at = 8;
+
+  // 模型设计时的UI布局位置
+  int32 x = 9;
+  int32 y = 10;
+
+  // 模型属性 (columns)
+  repeated Attribute attrs = 11;
+
+    // 模型索引
+  repeated Index indexes = 12;
+
+  // 跨模块的模型关联
+  repeated Relation relations = 13;
+
+  // 是否包含工厂
+  bool has_factory = 14;
+
+  // 是否包含Seeder
+  bool has_seeder = 15;
+}

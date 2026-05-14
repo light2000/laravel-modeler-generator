@@ -1,0 +1,65 @@
+syntax = "proto3";
+
+import "module.proto";
+import "item.proto";
+import "dict.proto";
+import "namespace.proto";
+import "google/protobuf/timestamp.proto";
+
+option php_namespace = "Proto";
+option go_package = "/proto;proto";
+
+//
+// ======
+// 项目
+// ======
+//
+
+message GlobalEnumLayoutConfig {
+  // 命名空间
+  string namespace = 1;
+}
+
+message PivotLayoutConfig {
+  // 命名空间
+  string model_namespace = 1;
+
+  // 迁移输出路径
+  string migration_output_path = 2;
+
+  // 工厂命名空间
+  string factory_namespace = 3;
+
+}
+
+message Project {
+  // 项目中的模块
+  repeated Module modules = 1;
+
+  // 中间表模型 (pivot models / pivot tables)
+  repeated Item pivot_items = 2;
+
+    // 枚举配置
+  repeated Dict dictionaries = 3;
+
+  // 项目Schema版本
+  int32 schema_version = 4;
+
+  // 项目名称
+  string name = 5;
+
+  // 项目构建时间
+  google.protobuf.Timestamp build_at = 6;
+
+  // 项目构建版本
+  string build_version = 7;
+
+  // 项目可用命名空间
+  repeated Namespace namespaces = 8;
+
+  // 中间表模型命名空间ID
+  PivotLayoutConfig pivot_layout_config  = 9;
+
+  // 全局枚举命名空间ID
+  GlobalEnumLayoutConfig global_enum_layout_config = 10;
+}

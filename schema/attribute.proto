@@ -1,0 +1,158 @@
+syntax = "proto3";
+
+option php_namespace = "Proto";
+option go_package = "/proto;proto";
+
+//
+// ===========
+// 属性
+// ===========
+//
+
+enum AttributeAbility {
+  ATTRIBUTE_ABILITY_UNSPECIFIED = 0;
+  ATTRIBUTE_ABILITY_ACCOUNT = 1;
+  ATTRIBUTE_ABILITY_PASSWORD = 2;
+  ATTRIBUTE_ABILITY_NICKNAME = 3;
+  ATTRIBUTE_ABILITY_AVATAR = 4;
+  ATTRIBUTE_ABILITY_EMAIL = 5;
+  ATTRIBUTE_ABILITY_PHONE = 6;
+  ATTRIBUTE_ABILITY_URL = 7;
+  ATTRIBUTE_ABILITY_IP = 8;
+  ATTRIBUTE_ABILITY_COLOR = 9;
+  ATTRIBUTE_ABILITY_HIDDEN = 10;
+  ATTRIBUTE_ABILITY_IMAGE = 11;
+  ATTRIBUTE_ABILITY_VIDEO = 12;
+  ATTRIBUTE_ABILITY_AUDIO = 13;
+  ATTRIBUTE_ABILITY_DOCUMENT = 14;
+  ATTRIBUTE_ABILITY_ARCHIVE = 15;
+  ATTRIBUTE_ABILITY_NAME = 16;          // fake()->name()
+  ATTRIBUTE_ABILITY_FIRST_NAME = 17;    // fake()->firstName()
+ATTRIBUTE_ABILITY_LAST_NAME = 18;     // fake()->lastName()
+ATTRIBUTE_ABILITY_USERNAME = 19;      // fake()->userName()
+ATTRIBUTE_ABILITY_SLUG = 20;          // fake()->slug()
+ATTRIBUTE_ABILITY_UUID = 21;          // fake()->uuid()
+ATTRIBUTE_ABILITY_DOMAIN = 22;        // fake()->domainName()
+ATTRIBUTE_ABILITY_IPV6 = 23;          // fake()->ipv6()
+ATTRIBUTE_ABILITY_MAC_ADDRESS = 24;   // fake()->macAddress()
+ATTRIBUTE_ABILITY_ADDRESS = 25;       // fake()->address()
+ATTRIBUTE_ABILITY_COUNTRY = 26;       // fake()->country()
+ATTRIBUTE_ABILITY_PROVINCE = 27;      // fake()->state()
+ATTRIBUTE_ABILITY_CITY = 28;          // fake()->city()
+ATTRIBUTE_ABILITY_STREET_ADDRESS = 29;// fake()->streetAddress()
+ATTRIBUTE_ABILITY_POSTCODE = 30;      // fake()->postcode()
+ATTRIBUTE_ABILITY_LATITUDE = 31;      // fake()->latitude()
+ATTRIBUTE_ABILITY_LONGITUDE = 32;     // fake()->longitude()
+ATTRIBUTE_ABILITY_COMPANY = 33;       // fake()->company()
+ATTRIBUTE_ABILITY_JOB_TITLE = 34;     // fake()->jobTitle()
+
+}
+
+enum AttributeType {
+  ATTRIBUTE_TYPE_UNSPECIFIED = 0;
+  ATTRIBUTE_TYPE_INT = 1;
+  ATTRIBUTE_TYPE_DECIMAL = 2;
+  ATTRIBUTE_TYPE_BOOL = 3;
+  ATTRIBUTE_TYPE_STRING = 4;
+  ATTRIBUTE_TYPE_TEXT = 5;
+  ATTRIBUTE_TYPE_LONG_TEXT = 6;
+  ATTRIBUTE_TYPE_DATE = 7;
+  ATTRIBUTE_TYPE_TIME = 8;
+  ATTRIBUTE_TYPE_DATETIME = 9;
+  ATTRIBUTE_TYPE_YEAR = 10;
+  ATTRIBUTE_TYPE_ENUM = 11;
+  ATTRIBUTE_TYPE_SETS = 12;
+  ATTRIBUTE_TYPE_FILE = 13;
+  ATTRIBUTE_TYPE_FILES = 14;
+}
+
+enum AttributeFieldType {
+  ATTRIBUTE_FIELD_TYPE_UNSPECIFIED = 0;
+  ATTRIBUTE_FIELD_TYPE_TINYINT = 1;
+  ATTRIBUTE_FIELD_TYPE_SMALLINT = 2;
+  ATTRIBUTE_FIELD_TYPE_MEDIUMINT = 3;
+  ATTRIBUTE_FIELD_TYPE_INT = 4;
+  ATTRIBUTE_FIELD_TYPE_BIGINT = 5;
+  ATTRIBUTE_FIELD_TYPE_FLOAT = 6;
+  ATTRIBUTE_FIELD_TYPE_DOUBLE = 7;
+  ATTRIBUTE_FIELD_TYPE_DECIMAL = 8;
+  ATTRIBUTE_FIELD_TYPE_CHAR = 9;
+  ATTRIBUTE_FIELD_TYPE_VARCHAR = 10;
+  ATTRIBUTE_FIELD_TYPE_TEXT = 11;
+  ATTRIBUTE_FIELD_TYPE_TINYTEXT = 12;
+  ATTRIBUTE_FIELD_TYPE_MEDIUMTEXT = 13;
+  ATTRIBUTE_FIELD_TYPE_LONGTEXT = 14;
+  ATTRIBUTE_FIELD_TYPE_JSON = 15;
+  ATTRIBUTE_FIELD_TYPE_DATE = 16;
+  ATTRIBUTE_FIELD_TYPE_DATETIME = 17;
+  ATTRIBUTE_FIELD_TYPE_TIMESTAMP = 18;
+  ATTRIBUTE_FIELD_TYPE_TIME = 19;
+  ATTRIBUTE_FIELD_TYPE_YEAR = 20;
+}
+
+enum AttributeDefaultValueType {
+  ATTRIBUTE_DEFAULT_VALUE_TYPE_NONE = 0;
+  ATTRIBUTE_DEFAULT_VALUE_TYPE_NULL = 1;
+  ATTRIBUTE_DEFAULT_VALUE_TYPE_CURRENT_TIMESTAMP = 2;
+  ATTRIBUTE_DEFAULT_VALUE_TYPE_VALUE = 3;
+}
+
+enum AttributeBehavior {
+  ATTRIBUTE_BEHAVIOR_NONE = 0;
+  ATTRIBUTE_BEHAVIOR_FK = 1;
+  ATTRIBUTE_BEHAVIOR_MORPH_ID = 2;
+  ATTRIBUTE_BEHAVIOR_MORPH_TYPE = 3;
+}
+
+message Attribute {
+  // ULID
+  string id = 1;
+
+  // 属性名称
+  string name = 2;
+
+  // 属性代码
+  string code = 3;
+
+  // 属性类型
+  AttributeType type = 4;
+
+    // 属性能力
+  repeated AttributeAbility abilities = 5;
+
+  // 小数精度
+  int32 precision = 6;
+
+  // 小数位数
+  int32 scale = 7;
+
+  // 枚举字典引用
+  string dict_id = 8;
+
+  // 物理字段类型
+  // 约定：
+  // - field_type = NONE 表示由 AttributeType 自动推导
+  // - 只有用户“强制修改”时才写 field_type
+  AttributeFieldType field_type = 9;
+
+  // 字段长度
+  int32 field_length = 10;
+
+  // 是否可为空
+  bool nullable = 11;
+
+  // 默认值类型
+  AttributeDefaultValueType default_value_type = 12;
+
+  // 默认值 (字符串字面量, 仅当 default_type = VALUE 时使用)
+  string default_value = 13;
+
+  // 属性行为
+  AttributeBehavior behavior = 14;
+
+  // 假数据最小值
+  string fake_min = 15;
+
+  // 假数据最大值
+  string fake_max = 16;
+}

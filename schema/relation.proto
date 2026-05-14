@@ -1,0 +1,71 @@
+syntax = "proto3";
+
+option php_namespace = "Proto";
+option go_package = "/proto;proto";
+
+
+//
+// =========
+// 模型关联
+// =========
+//
+
+enum RelationType {
+    ITEM_RELATION_TYPE_UNSPECIFIED = 0;
+    ITEM_RELATION_TYPE_BELONGS_TO = 1;
+    ITEM_RELATION_TYPE_HAS_ONE = 2;
+    ITEM_RELATION_TYPE_HAS_MANY = 3;
+    ITEM_RELATION_TYPE_BELONGS_TO_MANY = 4;
+    ITEM_RELATION_TYPE_MORPH_ONE = 5;
+    ITEM_RELATION_TYPE_MORPH_MANY = 6;
+    ITEM_RELATION_TYPE_MORPH_TO_MANY = 7;
+    ITEM_RELATION_TYPE_MORPHED_BY_MANY = 8;
+    ITEM_RELATION_TYPE_MORPH_TO = 9;
+}
+
+message MorphTarget {
+  // 目标模型 ID
+  string target_item_id = 1;
+
+  // 源模型侧关联名称，多对多多态时使用
+  string code = 2;
+
+  // 反向关联ID
+  string reverse_relation_id = 3;
+}
+
+
+message Relation {
+  // ULID
+  string id = 1;
+
+  // 关联名称
+  string name = 2;
+
+  // 关联代码
+  string code = 3;
+
+  // 关联类型
+  RelationType type = 4;
+
+  // 关联模型ID
+  string target_item_id = 5;
+
+  // 关联属性ID
+  string attr_id = 6;
+
+  // 中间表模型ID
+  string pivot_id = 7;
+
+  //多态对象集合
+  repeated MorphTarget morph_targets = 8;
+
+  //是否反向
+  bool is_reverse = 9;
+
+  //是否模块内部关联
+  bool is_internal = 10;
+
+  // 反向关联ID
+  string reverse_relation_id = 11;
+}

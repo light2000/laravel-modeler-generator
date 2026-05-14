@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+option php_namespace = "Proto";
+option go_package = "/proto;proto";
+
+//
+// ======
+// 命名空间
+// ======
+//
+
+message Namespace {
+  // ULID
+  string id = 1;
+
+  // 命名空间名称
+  string name = 2;
+
+  // 模型命名空间
+  string model_namespace = 3;
+
+  // 迁移输出路径
+  string migration_output_path = 4;
+
+  // 工厂命名空间
+  string factory_namespace = 5;
+
+  // Seeder命名空间
+  string seeder_namespace = 6;
+
+  // Enum命名空间
+  string enum_namespace = 7;
+
+  // 是否系统默认命名空间
+  bool is_system = 8;
+}
+
+
+
