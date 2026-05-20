@@ -19,7 +19,7 @@ func FromProtoIndex(p *proto.Index, item *Item, project *Project) *Index {
 	if p == nil {
 		return nil
 	}
-	mustSnakeCode("FromProtoIndex", p.Id, p.Code)
+	mustSnakeCode("FromProtoIndex", p.Id, item.Name, p.Code)
 	index := &Index{
 		Index:   p,
 		Project: project,

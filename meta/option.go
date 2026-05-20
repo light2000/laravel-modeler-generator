@@ -18,7 +18,7 @@ func FromProtoOption(idx int, p *proto.Option, dict *Dict, project *Project) *Op
 	if p == nil {
 		return nil
 	}
-	mustSnakeCode("FromProtoOption", fmt.Sprintf("%s[%d]", dict.Id, idx), p.Code)
+	mustSnakeCode("FromProtoOption", fmt.Sprintf("%s[%d]", dict.Id, idx), fmt.Sprintf("%s.%s", dict.Name, p.Name), p.Code)
 
 	option := &Option{
 		Option:  p,

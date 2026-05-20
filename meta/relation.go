@@ -20,7 +20,7 @@ func FromProtoRelation(p *proto.Relation, item *Item, module *Module, project *P
 		return nil
 	}
 	if p.Type != proto.RelationType_ITEM_RELATION_TYPE_MORPHED_BY_MANY {
-		mustSnakeCode("FromProtoRelation", p.Id, p.Code)
+		mustSnakeCode("FromProtoRelation", p.Id, p.Name, p.Code)
 	}
 
 	if len(p.MorphTargets) > 0 {
@@ -28,7 +28,9 @@ func FromProtoRelation(p *proto.Relation, item *Item, module *Module, project *P
 			if mt == nil {
 				panic(fmt.Sprintf("meta.FromProtoRelation: MorphTargets[%d] 为 nil (relation id=%s)", i, p.Id))
 			}
-			mustSnakeCode("FromProtoRelation.MorphTarget", fmt.Sprintf("%s[%d]", p.Id, i), mt.Code)
+			if p.Type == proto.RelationType_ITEM_RELATION_TYPE_MORPHED_BY_MANY {
+				mustSnakeCode("FromProtoRelation.MorphTarget", fmt.Sprintf("%s[%d]", p.Id, i), p.Name, mt.Code)
+			}
 		}
 	}
 	relation := &Relation{

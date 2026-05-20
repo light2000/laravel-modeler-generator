@@ -19,7 +19,7 @@ func FromProtoModule(p *proto.Module, project *Project) *Module {
 	if p == nil {
 		return nil
 	}
-	mustSnakeCode("FromProtoModule", p.Id, p.Code)
+	mustSnakeCode("FromProtoModule", p.Id, p.Name, p.Code)
 	m := &Module{
 		Module:  p,
 		Project: project,

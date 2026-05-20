@@ -24,8 +24,8 @@ func checkSnakeCode(code string) string {
 	return ""
 }
 
-func mustSnakeCode(from string, id string, code string) {
+func mustSnakeCode(from string, id string, name string, code string) {
 	if msg := checkSnakeCode(code); msg != "" {
-		panic(fmt.Sprintf("meta.%s: %s (id=%s, code=%q)", from, msg, id, code))
+		panic(fmt.Sprintf("meta.%s: %s (id=%s, name=%s, code=%q)", from, msg, id, name, code))
 	}
 }

@@ -25,7 +25,7 @@ func FromProtoItem(p *proto.Item, module *Module, project *Project, isPivot bool
 	if p == nil {
 		return nil
 	}
-	mustSnakeCode("FromProtoItem", p.Id, p.Code)
+	mustSnakeCode("FromProtoItem", p.Id, p.Name, p.Code)
 
 	m := &Item{
 		Item:    p,

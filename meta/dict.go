@@ -22,7 +22,7 @@ func FromProtoDict(p *proto.Dict, project *Project) *Dict {
 	if p == nil {
 		return nil
 	}
-	mustSnakeCode("FromProtoDict", p.Id, p.Code)
+	mustSnakeCode("FromProtoDict", p.Id, p.Name, p.Code)
 	dict := &Dict{
 		Dict:    p,
 		Project: project,
