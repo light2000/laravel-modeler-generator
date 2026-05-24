@@ -13,6 +13,7 @@ const (
 	MigrationCreateTable
 	MigrationAttrRemove
 	MigrationAttrAdd
+	MigrationAttrRename
 	MigrationAttrUpdate
 	MigrationIndexRemove
 	MigrationIndexAdd
@@ -29,18 +30,19 @@ func ItemMigrationBuild(project *meta.Project, engine *templatex.Engine) {
 	migrationIndexAddLoader := engine.NewLoader("laravel/item/MigrationIndexAdd.tpl")
 	migrationIndexRemoveLoader := engine.NewLoader("laravel/item/MigrationIndexRemove.tpl")
 	migrationIndexRenameLoader := engine.NewLoader("laravel/item/MigrationIndexRename.tpl")
+	migrationAttrRenameLoader := engine.NewLoader("laravel/item/MigrationAttrRename.tpl")
 
-	migrationBuild(project, migrationLoader, migrationDropTableLoader, migrationAttrRemoveLoader, migrationAttrAddLoader, migrationAttrUpdateLoader, migrationRenameLoader, migrationIndexAddLoader, migrationIndexRemoveLoader, migrationIndexRenameLoader)
+	migrationBuild(project, migrationLoader, migrationDropTableLoader, migrationAttrRemoveLoader, migrationAttrAddLoader, migrationAttrUpdateLoader, migrationRenameLoader, migrationIndexAddLoader, migrationIndexRemoveLoader, migrationIndexRenameLoader, migrationAttrRenameLoader)
 	for project.PrevProject != nil {
 		project = project.PrevProject
-		migrationBuild(project, migrationLoader, migrationDropTableLoader, migrationAttrRemoveLoader, migrationAttrAddLoader, migrationAttrUpdateLoader, migrationRenameLoader, migrationIndexAddLoader, migrationIndexRemoveLoader, migrationIndexRenameLoader)
+		migrationBuild(project, migrationLoader, migrationDropTableLoader, migrationAttrRemoveLoader, migrationAttrAddLoader, migrationAttrUpdateLoader, migrationRenameLoader, migrationIndexAddLoader, migrationIndexRemoveLoader, migrationIndexRenameLoader, migrationAttrRenameLoader)
 	}
 }
 
 func migrationBuild(project *meta.Project, migrationLoader *templatex.Loader,
 	migrationDropTableLoader *templatex.Loader, migrationAttrRemoveLoader *templatex.Loader,
 	migrationAttrAddLoader *templatex.Loader, migrationAttrUpdateLoader *templatex.Loader, migrationRenameLoader *templatex.Loader,
-	migrationIndexAddLoader *templatex.Loader, migrationIndexRemoveLoader *templatex.Loader, migrationIndexRenameLoader *templatex.Loader) {
+	migrationIndexAddLoader *templatex.Loader, migrationIndexRemoveLoader *templatex.Loader, migrationIndexRenameLoader *templatex.Loader, migrationAttrRenameLoader *templatex.Loader) {
 
 	data := map[string]interface{}{
 		"Project": project,
@@ -127,6 +129,15 @@ func migrationBuild(project *meta.Project, migrationLoader *templatex.Loader,
 						}, true)
 					} else if IsUpdateAttribute(attr, prevProject) {
 						migrationAttrUpdateLoader.Render(fmt.Sprintf("%s/%s_v%s_%d0_update_%s_%s.php", item.MigrationOutputPath(), item.MigrationTime(), project.BuildVersion, MigrationAttrUpdate, item.Table, attr.Snake()), map[string]interface{}{
+							"Project":      project,
+							"Module":       item.Module,
+							"Item":         item,
+							"NewAttribute": attr,
+							"OldAttribute": prevProject.MapAttributes[attr.Id],
+							"Rename":       attr.Snake() != prevProject.MapAttributes[attr.Id].Snake(),
+						}, true)
+					} else if IsRenameAttribute(attr, prevProject) {
+						migrationAttrRenameLoader.Render(fmt.Sprintf("%s/%s_v%s_%d0_rename_%s_%s.php", item.MigrationOutputPath(), item.MigrationTime(), project.BuildVersion, MigrationAttrRename, item.Table, attr.Snake()), map[string]interface{}{
 							"Project":      project,
 							"Module":       item.Module,
 							"Item":         item,
@@ -227,6 +238,15 @@ func migrationBuild(project *meta.Project, migrationLoader *templatex.Loader,
 						"Item":         pivotItem,
 						"NewAttribute": attr,
 						"OldAttribute": oldAttr,
+						"Rename":       attr.Snake() != oldAttr.Snake(),
+					}, true)
+				} else if IsRenameAttribute(attr, prevProject) {
+					migrationAttrRenameLoader.Render(fmt.Sprintf("%s/%s_v%s_%d0_rename_%s_%s.php", pivotItem.MigrationOutputPath(), pivotItem.MigrationTime(), project.BuildVersion, MigrationAttrRename, pivotItem.Table, attr.Snake()), map[string]interface{}{
+						"Project":      project,
+						"Module":       pivotItem.Module,
+						"Item":         pivotItem,
+						"NewAttribute": attr,
+						"OldAttribute": prevProject.MapAttributes[attr.Id],
 					}, true)
 				}
 			}
@@ -349,6 +369,17 @@ func IsDropWithAddAttribute(attr *meta.Attribute, prevProject *meta.Project) boo
 	}
 
 	return false
+}
+
+func IsRenameAttribute(attr *meta.Attribute, prevProject *meta.Project) bool {
+	if nil == prevProject {
+		return false
+	}
+	if _, ok := prevProject.MapAttributes[attr.Id]; !ok {
+		return false
+	}
+
+	return prevProject.MapAttributes[attr.Id].Snake() != attr.Snake()
 }
 
 func IsUpdateAttribute(attr *meta.Attribute, prevProject *meta.Project) bool {
