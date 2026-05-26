@@ -632,12 +632,15 @@ func (attr *Attribute) PhpFakeValue() string {
 		if nil == err {
 			minLen = min
 		}
-		if maxLen < minLen {
-			maxLen = minLen
-		}
+
 		if attr.StrFieldLength() > 0 && maxLen > int(attr.StrFieldLength()) {
 			maxLen = int(attr.StrFieldLength())
 		}
+
+		if minLen > maxLen {
+			minLen = maxLen
+		}
+
 		fakeVar = fmt.Sprintf("fake()%s->lexify(str_repeat('?', rand(%d, %d)))", unique, minLen, maxLen)
 		if attr.HasAbility(proto.AttributeAbility_ATTRIBUTE_ABILITY_EMAIL) {
 			fakeVar = fmt.Sprintf("fake()%s->safeEmail()", unique)
